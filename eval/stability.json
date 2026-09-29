@@ -1,0 +1,38 @@
+{
+  "generatedAt": "2026-09-29T13:56:08.187Z",
+  "rounds": 3,
+  "samples": [
+    {
+      "id": "01",
+      "file": "01-产品采购合同.txt",
+      "counts": [
+        8,
+        7,
+        6
+      ],
+      "countSpread": 2,
+      "similarity": [
+        0.28,
+        0.3,
+        0.3
+      ],
+      "avgSimilarity": 0.29
+    },
+    {
+      "id": "08",
+      "file": "08-建设工程施工合同.txt",
+      "counts": [
+        9,
+        9,
+        9
+      ],
+      "countSpread": 0,
+      "similarity": [
+        0.26,
+        0.31,
+        0.29
+      ],
+      "avgSimilarity": 0.29
+    }
+  ]
+}

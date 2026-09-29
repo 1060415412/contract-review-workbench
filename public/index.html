@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>合同审查工作台</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap topbar-inner">
+    <div class="brand">
+      <span class="logo">合</span>
+      <div class="brand-text">
+        <h1>合同审查工作台</h1>
+        <p>AI 合同风险识别与修改建议</p>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="status" id="statusBadge">
+        <span class="dot"></span><span id="statusText">正在检测审查引擎…</span>
+      </div>
+      <button type="button" class="btn btn-ghost btn-sm" id="configBtn">接口配置</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- 首屏 -->
+  <section class="card hero">
+    <span class="eyebrow">AI 合同风险识别</span>
+    <h2>上传合同，快速获得清晰可执行的审查意见</h2>
+    <p class="hero-desc">
+      系统可以提取合同内容、识别合同风险、检查法律引用是否过时，并生成可直接用于谈判的修改建议。
+      审查结果仅作初筛与讨论参考，不作为最终法律意见。
+    </p>
+
+    <ol class="steps" id="steps">
+      <li class="step" data-step="1">
+        <span class="step-idx">1</span>
+        <div class="step-body">
+          <strong>提取合同内容</strong>
+          <em>读取 PDF / Word / TXT / MD 正文</em>
+        </div>
+      </li>
+      <li class="step" data-step="2">
+        <span class="step-idx">2</span>
+        <div class="step-body">
+          <strong>查询企业信息</strong>
+          <em>核验合作方登记与经营状况</em>
+        </div>
+      </li>
+      <li class="step" data-step="3">
+        <span class="step-idx">3</span>
+        <div class="step-body">
+          <strong>审查合同条款</strong>
+          <em>按立场识别风险与旧法引用</em>
+        </div>
+      </li>
+      <li class="step" data-step="4">
+        <span class="step-idx">4</span>
+        <div class="step-body">
+          <strong>生成审查报告</strong>
+          <em>输出意见并同步飞书文档</em>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <!-- 提交区域 -->
+  <section class="card">
+    <div class="card-head">
+      <h3>提交合同</h3>
+      <span class="card-note">带 <i class="req">*</i> 为必填</span>
+    </div>
+
+    <div class="form-grid">
+      <div class="field">
+        <label for="contractType">合同类型 <i class="req">*</i></label>
+        <select id="contractType">
+          <option value="采购合同">采购合同</option>
+          <option value="销售合同">销售合同</option>
+          <option value="服务合同">服务合同</option>
+          <option value="劳动合同">劳动合同</option>
+          <option value="保密协议">保密协议</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>审查立场 <i class="req">*</i></label>
+        <div class="segmented" id="stanceGroup">
+          <button type="button" class="seg active" data-value="甲方">甲方</button>
+          <button type="button" class="seg" data-value="乙方">乙方</button>
+          <button type="button" class="seg" data-value="中立">中立</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>重点审查内容</label>
+      <div class="chips" id="focusGroup">
+        <button type="button" class="chip active" data-value="付款与结算">付款与结算</button>
+        <button type="button" class="chip active" data-value="违约责任">违约责任</button>
+        <button type="button" class="chip" data-value="知识产权">知识产权</button>
+        <button type="button" class="chip" data-value="交付验收">交付验收</button>
+        <button type="button" class="chip" data-value="解除终止">解除终止</button>
+      </div>
+      <p class="hint">可多选，未选择时按通用条款全面审查。</p>
+    </div>
+
+    <div class="field">
+      <label for="extra">补充审查要求</label>
+      <textarea id="extra" rows="3" placeholder="例如：本次为年度框架协议，重点确认续约机制、价格调整机制与数据合规条款。"></textarea>
+    </div>
+
+    <div class="field">
+      <label>合同内容 <i class="req">*</i></label>
+      <div class="upload" id="dropzone" tabindex="0" role="button" aria-label="点击或拖拽上传合同文件">
+        <svg class="upload-icon" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true">
+          <path d="M12 16V4m0 0L8 8m4-4 4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        </svg>
+        <p class="upload-main">点击上传，或将文件拖拽到此处</p>
+        <p class="upload-sub">支持 PDF、Word、TXT、MD 文件，单个文件不超过 10MB</p>
+        <input type="file" id="fileInput" accept=".pdf,.doc,.docx,.txt,.md,.markdown" hidden />
+      </div>
+      <div class="file-info hidden" id="fileInfo">
+        <span class="file-name" id="fileName"></span>
+        <span class="file-size" id="fileSize"></span>
+        <button type="button" class="link-btn" id="removeFile">移除</button>
+      </div>
+
+      <div class="or-line"><span>或直接粘贴合同文本</span></div>
+      <textarea id="contractText" rows="7" placeholder="将合同正文粘贴到此处…（上传文件时可留空）"></textarea>
+    </div>
+
+    <p class="error hidden" id="formError"></p>
+
+    <div class="actions">
+      <button type="button" class="btn btn-primary" id="submitBtn">开始智能审查</button>
+      <button type="button" class="btn btn-ghost" id="resetBtn">重置</button>
+    </div>
+  </section>
+
+  <!-- 审查过程 -->
+  <section class="card progress-card hidden" id="progressCard">
+    <div class="progress-head">
+      <span class="spinner" aria-hidden="true"></span>
+      <div>
+        <strong id="progressTitle">正在提取文本并逐项分析合同条款，请稍候</strong>
+        <p id="progressDesc">已提交至本地审查引擎（提取文本 → 查询企业信息 → 大模型审查 → 生成报告）。</p>
+      </div>
+    </div>
+    <div class="progress-bar"><span id="progressFill"></span></div>
+    <p class="progress-time">已用时 <span id="elapsed">0</span> 秒 · 审查期间不可重复提交</p>
+  </section>
+
+  <!-- 审查结果 -->
+  <section id="resultArea"></section>
+
+  <!-- 历史记录 -->
+  <section class="card">
+    <div class="card-head">
+      <h3>历史记录</h3>
+      <button type="button" class="link-btn" id="clearHistory">清空记录</button>
+    </div>
+    <div id="historyList" class="history-list"></div>
+  </section>
+
+  <p class="disclaimer">
+    审查结果由 AI 工作流初筛生成，风险等级为系统关键词初判，签署前请由法务或外部律师复核。
+  </p>
+</main>
+
+<!-- 密钥配置弹窗 -->
+<div class="modal-mask hidden" id="configModal">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="configTitle">
+    <div class="card-head"><h3 id="configTitle">配置大模型接口</h3></div>
+    <p class="modal-tip">配置只保存在本机 <code>.env</code> 并在服务端使用，不会出现在页面代码、日志或仓库中。</p>
+    <div class="field">
+      <label for="baseUrlInput">接口地址（OpenAI 兼容 /chat/completions）</label>
+      <input type="text" id="baseUrlInput" placeholder="https://api.deepseek.com/v1" />
+    </div>
+    <div class="field">
+      <label for="tokenInput">API Key</label>
+      <input type="password" id="tokenInput" placeholder="sk-xxx…" autocomplete="off" />
+    </div>
+    <div class="field">
+      <label for="modelInput">模型名称</label>
+      <input type="text" id="modelInput" placeholder="deepseek-chat" />
+    </div>
+    <div class="field">
+      <label for="entInput">企业信息数据源接口（可选）</label>
+      <input type="text" id="entInput" placeholder="留空则跳过企业信息查询" />
+    </div>
+    <p class="error hidden" id="configError"></p>
+    <div class="actions">
+      <button type="button" class="btn btn-primary" id="saveConfig">保存</button>
+      <button type="button" class="btn btn-ghost" id="closeConfig">取消</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast hidden" id="toast"></div>
+
+<script src="app.js"></script>
+</body>
+</html>

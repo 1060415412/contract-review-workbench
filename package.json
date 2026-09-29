@@ -1,0 +1,13 @@
+{
+  "name": "contract-review-workbench",
+  "version": "1.0.0",
+  "private": true,
+  "description": "合同审查工作台：对接扣子（Coze）工作流的本地可运行网页",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
