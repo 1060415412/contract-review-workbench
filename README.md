@@ -1,4 +1,6 @@
-# 合同审查工作台 v2.0.0（本地编排版）
+# 合同审查工作台 v2.1.0（本地编排版）
+
+仓库：https://github.com/1060415412/contract-review-workbench
 
 按上传的扣子工作流 `law_check` 的节点逻辑，在本地复刻完整编排；**不调用扣子**，三个 LLM 节点改为可替换的大模型接口，由你自行接入。
 
@@ -19,7 +21,7 @@ npm -v
 ### 2. 拿到代码
 
 ```bash
-git clone <你的仓库地址> contract-review
+git clone https://github.com/1060415412/contract-review-workbench.git contract-review
 cd contract-review
 ```
 
